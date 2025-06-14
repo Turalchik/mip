@@ -1,0 +1,79 @@
+<robot name="inverted_pendulum_system">
+
+    <material name="dark_surface">
+        <color rgba="0 0 0 1"/>
+    </material>
+
+    <material name="light_surface">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <material name="neutral_surface">
+        <color rgba="0.4 0.4 0.4 1"/>
+    </material>
+
+    <link name="world_frame"/>
+
+    <link name="pivot_point">
+        <visual>
+            <geometry>
+                <sphere radius="0.1"/>
+            </geometry>
+            <material name="light_surface"/>
+        </visual>
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+
+    <link name="pendulum_rod">
+        <visual>
+            <geometry>
+                <cylinder radius="0.01" length="0.8"/>
+            </geometry>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
+            <material name="neutral_surface"/>
+        </visual>
+        <inertial>
+            <mass value="0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+
+    <link name="pendulum_bob">
+        <visual>
+            <geometry>
+                <sphere radius="0.05"/>
+            </geometry>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <material name="dark_surface"/>
+        </visual>
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="1"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+
+    <joint name="world_anchor" type="fixed">
+        <parent link="world_frame"/>
+        <child link="pivot_point"/>
+        <origin xyz="0 0 1.5" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="pendulum_joint" type="revolute">
+        <parent link="pivot_point"/>
+        <child link="pendulum_rod"/>
+        <origin xyz="0 0 0" rpy="0 3.14159265358979323846 0"/>
+        <limit effort="0" velocity="0"/>
+        <dynamics damping="0" friction="0"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="bob_attachment" type="fixed">
+        <parent link="pendulum_rod"/>
+        <child link="pendulum_bob"/>
+        <origin xyz="0 0 0.8" rpy="0 0 0"/>
+    </joint>
+</robot>

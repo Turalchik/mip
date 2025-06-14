@@ -6,10 +6,10 @@ import pybullet_data
 from control.matlab import place
 
 
-USE_VISUALIZATION = True
+USE_VISUALIZATION = False
 TIME_STEP = 1 / 240.0
 SIM_DURATION = 5.0
-INIT_ANGLE = 0.0
+INIT_ANGLE = 10.0
 TARGET_ANGLE = np.pi
 GRAVITY = 9.81
 ROD_LENGTH = 0.8
@@ -108,19 +108,14 @@ def run_simulation(pendulum, controller_gains):
 def plot_results(time, angles, velocities, torques):
     _, axes = plt.subplots(3, 1, figsize=(10, 8))
 
-    axes[0].plot(time, angles, 'navy', label="Текущий угол")
-    axes[0].plot([time[0], time[-1]], [TARGET_ANGLE, TARGET_ANGLE], 'r--', label="Целевой угол")
-    axes[0].set_ylabel("Угол (рад)")
-    axes[0].legend()
+    axes[0].plot(time, angles, 'navy')
+    axes[0].plot([time[0], time[-1]], [TARGET_ANGLE, TARGET_ANGLE], 'r--')
     axes[0].grid(True)
 
     axes[1].plot(time, velocities, 'darkgreen')
-    axes[1].set_ylabel("Скорость (рад/с)")
     axes[1].grid(True)
 
     axes[2].plot(time, torques, 'purple')
-    axes[2].set_ylabel("Управляющий момент (Н·м)")
-    axes[2].set_xlabel("Время (с)")
     axes[2].grid(True)
 
     plt.tight_layout()

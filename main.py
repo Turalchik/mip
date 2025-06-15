@@ -6,7 +6,7 @@ import pybullet_data
 from control.matlab import place
 
 
-USE_VISUALIZATION = False
+USE_VISUALIZATION = True
 TIME_STEP = 1 / 240.0
 SIM_DURATION = 5.0
 INIT_ANGLE = 10.0
@@ -17,32 +17,18 @@ MASS = 1.0
 
 
 def configure_controller():
-    angular_acceleration = GRAVITY / ROD_LENGTH
-    inertia_coeff = 1.0 / (MASS * ROD_LENGTH ** 2)
-
-    state_matrix = np.vstack([
-        np.array([0.0, 1.0]),
-        np.array([angular_acceleration, 0.0])
+    state_matrix = np.array([
+        [0.0, 1.0],
+        [GRAVITY / ROD_LENGTH, 0.0]
     ])
 
-    input_matrix = np.vstack([
-        np.zeros(1),
-        np.array([inertia_coeff])
+    input_matrix = np.array([
+        [0.0],
+        [1.0 / (MASS * ROD_LENGTH ** 2)]
     ])
 
-    damping_ratio = 0.707
-    natural_freq = 2.828
-
-    pole_real = -damping_ratio * natural_freq
-    pole_imag = natural_freq * np.sqrt(1 - damping_ratio ** 2)
-
-    desired_poles = np.array([
-        pole_real + pole_imag * 1j,
-        pole_real - pole_imag * 1j
-    ])
-
+    desired_poles = np.array([-1 + 0.5j, -1 - 0.5j])
     feedback_gains = -place(state_matrix, input_matrix, desired_poles)
-
     return feedback_gains
 
 
